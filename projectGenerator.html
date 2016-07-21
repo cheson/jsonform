@@ -1,0 +1,386 @@
+<!--
+To future me or the poor soul who has to be changing the project JSON format,
+this generator was created using the library jsonform with all documentation found
+at https://github.com/joshfire/jsonform.
+
+At a high level, it uses a specific JSON format called a JSON Form object to define
+the schema of your JSON object. This is done under the schema key of the JSON form.
+Next, to define the look/view of the form, you modify the code under the form key of
+the JSON form.
+
+Good luck! It's fun!
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Roboterra Project JSON Generator</title>
+    <link rel="stylesheet" style="text/css" href="deps/opt/bootstrap.css" />
+  </head>
+  <body style="margin-left: 20px">
+    <h1>Project Maker</h1>
+    <form></form>
+    <div id="res" class="alert"></div>
+    <script type="text/javascript" src="deps/jquery.min.js"></script>
+    <script type="text/javascript" src="deps/underscore.js"></script>
+    <script type="text/javascript" src="deps/opt/jsv.js"></script>
+    <script type="text/javascript" src="lib/jsonform.js"></script>
+    <!-- <script type="text/javascript" src="deps/opt/jquery.ui.core.js"></script>
+    <script type="text/javascript" src="deps/opt/jquery.ui.widget.js"></script>
+    <script type="text/javascript" src="deps/opt/jquery.ui.mouse.js"></script>
+    <script type="text/javascript" src="deps/opt/jquery.ui.sortable.js"></script> -->
+    <script type="text/javascript">
+      $('form').jsonForm({
+        schema: {
+          projectID: {
+            type: 'integer',
+            title: 'Project ID',
+            required: true,
+            description: 'eg. 0'
+          },
+          projectName: {
+            type: 'string',
+            title: 'Project title',
+            required: true,
+            description: 'eg. Spicy Radishes are Rad'
+          },
+          image: {
+              type: 'string',
+              title: 'Link to image',
+              description: 'eg. www.imgur.com/roborocks'
+          },
+          model: {
+              type: 'string',
+              title: 'Link to model',
+              description: 'eg. www.model.com'
+          },
+          overview: {
+              type: 'object',
+            //   title: 'Overview',
+              properties: {
+                  description: {
+                      type: 'string',
+                      title: 'Description',
+                      description: 'eg. this project is intended to teach you how to be a spicy radish. spicy radishes are considered to be the king of the plant world because they are spicier than normal radishes. they are hot shots!'
+                  },
+                  learn: {
+                      type: 'array',
+                      title: 'List of topics to learn',
+                      items: {
+                          type: 'string',
+                          description: 'eg. example here?'
+                      }
+                  },
+                  parts: {
+                      type: 'array',
+                      title: 'List of parts needed',
+                      items: {
+                          type: 'string',
+                          description: 'eg. servo'
+                      }
+                  },
+                  video: {
+                      type: 'string',
+                      title: 'Link to video',
+                      description: 'eg. www.youtube.com/robot'
+                  },
+              }
+          },
+          challengeData: {
+              type: 'array',
+              items: {
+                  type: 'object',
+                  title: 'Challenge',
+                  properties: {
+                      level: {
+                          type: 'integer',
+                          title: 'Challenge level',
+                          description: 'eg. 0'
+                      },
+                      type: {
+                          type: 'string',
+                          title: 'Challenge type',
+                          enum: [ "code", "quiz", "build" ]
+                      },
+                      title: {
+                          type: 'string',
+                          title: 'Challenge title',
+                          description: 'eg. bestbot'
+                      },
+                      content: {
+                          type: 'array',
+                          items: {
+                              type: 'object',
+
+                              properties: {
+                                  text: {
+                                      type: 'string',
+                                      title: 'Text (GENERAL)',
+                                      description: 'eg. this could be one step in the coding challenge'
+                                  },
+                                  question: {
+                                      type: 'string',
+                                      title: 'Question (QUIZ ONLY)',
+                                      description: 'eg. who eats all the office snacks?'
+                                  },
+                                  choices: {
+                                      type: 'array',
+                                      title: 'Choices (QUIZ ONLY)',
+                                      items: {
+                                          type: 'string',
+                                          description: 'eg. one of many multiple choices'
+                                      }
+                                  },
+                                  answer: {
+                                      type: 'integer',
+                                      title: 'Answer (QUIZ ONLY)',
+                                      description: 'eg. the index of the answer (0-indexed)'
+                                  },
+                                  steps: {
+                                      type: 'array',
+                                      title: 'Steps (BUILD ONLY)',
+                                      items: {
+                                          type: 'integer',
+                                          description: 'eg. 0 (one of many integers)'
+                                      }
+                                  },
+                                  explanation: {
+                                      type: 'string',
+                                      title: 'Explanation (QUIZ ONLY)',
+                                      description: 'eg. mika because she loves nuts'
+                                  }
+                              }
+                          }
+                      },
+                      event_list: {
+                          type: 'array',
+                          items: {
+                              type: 'object',
+                              properties: {
+                                  text: {
+                                      type: 'string',
+                                      title: 'Event text',
+                                      description: 'eg. Turn on the LED plugged into DIO_1.'
+                                  },
+                                  event: {
+                                      type: 'array',
+                                      items: {
+                                          type: 'string',
+                                          title: 'Robocore event (format: PORT-EVENT-DATA) There can be multiple per event text.',
+                                          description: 'eg. DIO_1-LED_TURNON-1'
+                                      }
+                                  }
+                              }
+                          }
+                      },
+                      hint: {
+                          type: 'object',
+                          properties: {
+                              code: {
+                                  type: 'string',
+                                  title: 'Hint code',
+                                  description: 'eg. RoboTerraButton button;'
+                              },
+                              text: {
+                                  type: 'string',
+                                  title: 'Hint text',
+                                  description: 'eg. Make sure your button is declared!'
+                              }
+                          }
+                      },
+                      start_template: {
+                          type: 'string',
+                          title: 'Starting template',
+                          description: 'eg. #include \'ROBOTERRA.h\''
+                      },
+                      port_connections: {
+                          type: 'array',
+                          title: 'Port connections (format: PORT:DEVICE)',
+                          items: {
+                              type: 'string',
+                              title: 'Connection',
+                              description: 'eg. DIO_1:RoboTerraLED'
+                          }
+                      },
+                      conclusion: {
+                          type: 'string',
+                          title: 'Conclusion',
+                          description: 'eg. We hope you enjoyed Challenge 3 and learned a lot about how robots can make cakes and have tea parties!'
+                      }
+                  }
+              }
+          }
+        },
+        form: [
+            {
+                "type": "fieldset",
+                "title": "Project Identifiers",
+                "items": [
+                    "projectID",
+                    "projectName",
+                    {
+                        "key" : "image",
+                        "fieldHtmlClass": "input-xxlarge"
+                    },
+                    {
+                        "key" : "model",
+                        "fieldHtmlClass": "input-xxlarge"
+                    },
+                ]
+            },
+            {
+                "type": "fieldset",
+                "title": "Overview",
+                "items": [
+                    {
+                        "key": "overview.description",
+                        "type": "textarea"
+                    },
+                    {
+                        "key": "overview.learn",
+                    },
+                    {
+                        "key": "overview.parts",
+                    },
+                    {
+                        "key": "overview.video",
+                        "fieldHtmlClass": "input-xxlarge"
+                    },
+                ]
+            },
+            {
+                "type": "fieldset",
+                "title": "Challenge List",
+                "items": [
+                    {
+                        "type": "array",
+                        "items": [
+                            {
+                            "type": "fieldset",
+                            "title": "New Challenge",
+                            "items": [
+                                {
+                                    "key" : "challengeData[].level",
+                                },
+                                {
+                                    "key" : "challengeData[].title",
+                                },
+                                {
+                                    "key" : "challengeData[].type",
+                                },
+                                {
+                                    "type": "help",
+                                    "helpvalue": "List of challenge content. First block must be the introduction!\n___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________"
+                                },
+                                {
+                                    "type": "array",
+                                    "items": [
+                                        {
+                                            "type": "fieldset",
+                                            "items": [
+                                                {
+                                                    "key" : "challengeData[].content[].text",
+                                                    "fieldHtmlClass": "input-xxlarge"
+                                                },
+                                                {
+                                                    "key" : "challengeData[].content[].question",
+                                                    "fieldHtmlClass": "input-xxlarge"
+                                                },
+                                                {
+                                                    "key" : "challengeData[].content[].choices",
+                                                },
+                                                {
+                                                    "key" : "challengeData[].content[].answer",
+                                                },
+                                                {
+                                                    "key" : "challengeData[].content[].steps",
+                                                },
+                                                {
+                                                    "key" : "challengeData[].content[].explanation",
+                                                    "fieldHtmlClass": "input-xxlarge"
+                                                },
+                                                {
+                                                    "type": "help",
+                                                    "helpvalue": "___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________"
+                                                },
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "help",
+                                    "helpvalue": "List of challenge checklist events.\n___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________"
+                                },
+                                {
+                                    "type": "array",
+                                    "items": [
+                                        {
+                                            "type": "fieldset",
+                                            "items": [
+                                                {
+                                                    "key" : "challengeData[].event_list[].text",
+                                                    "fieldHtmlClass": "input-xxlarge"
+                                                },
+                                                {
+                                                    "key" : "challengeData[].event_list[].event",
+                                                    "fieldHtmlClass": "input-xxlarge"
+                                                },
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "help",
+                                    "helpvalue": "Please provide the hint code and text.\n___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________"
+                                },
+                                {
+                                    "key" : "challengeData[].hint.code",
+                                    "fieldHtmlClass": "input-xxlarge"
+                                },
+                                {
+                                    "key" : "challengeData[].hint.text",
+                                    "fieldHtmlClass": "input-xxlarge"
+                                },
+                                {
+                                    "type": "help",
+                                    "helpvalue": "Please provide the starting template and port connections.\n___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________"
+                                },
+                                {
+                                    "key" : "challengeData[].start_template",
+                                    "type": "textarea"
+                                },
+                                {
+                                    "key" : "challengeData[].port_connections",
+                                },
+                                {
+                                    "type": "help",
+                                    "helpvalue": "Please provide a short conclusion that prints out when the user completes a challenge.\n___________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________"
+                                },
+                                {
+                                    "key" : "challengeData[].conclusion",
+                                    "type": "textarea"
+                                },
+                            ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "submit",
+                "title": "Eat this!"
+            }
+        ],
+        onSubmit: function (errors, values) {
+          if (errors) {
+            $('#res').html('<p>Check your privilege!</p>');
+          }
+          else {
+            $('#res').html(JSON.stringify(values, null, 4));
+              //window.alert(JSON.stringify(values, null, 4));
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
